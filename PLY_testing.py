@@ -8,6 +8,8 @@ tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN',
+    'IF', 'THEN', 'ELSE', 'FI',
+    'QUESTIONMARK', 'COLON',
     )
 
 # Tokens
@@ -20,6 +22,12 @@ t_EQUALS  = r'='
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_IF      = r'if\s'
+t_THEN    = r'then\s'
+t_ELSE    = r'else\s'
+t_FI      = r'fi'
+t_QUESTIONMARK = r'\?'
+t_COLON   = r':'
 
 def t_NUMBER(t):
     r'\d+'
@@ -64,6 +72,11 @@ def p_statement_expr(t):
     'statement : expression'
     print(t[1])
 
+
+
+
+
+
 def p_expression_bool(t):
     'BOOL : LPAREN expression EQUALS EQUALS expression RPAREN'
     t[0] = (t[2] == t[5])
@@ -72,6 +85,29 @@ def p_expression_booldiv(t):
     'expression : expression BOOL expression'
     if (t[2]):
         t[0] = t[1] / t[3]
+
+# ERROR: Not working
+def p_expression_if_else(t):
+    'expression : IF BOOL THEN expression ELSE expression FI'
+    if (t[2]):
+        t[0] = t[4]
+    else:
+        t[0] = t[6]
+
+# ERROR: Not working
+def p_expression_if(t):
+    'expression : IF BOOL THEN expression FI'
+    if (t[2]):
+        t[0] = t[4]
+
+def p_expression_tenary_if(t):
+    'expression : BOOL QUESTIONMARK expression COLON expression'
+    if (t[1]):
+        t[0] = t[3]
+    else:
+        t[0] = t[5]
+
+
 
 def p_expression_binop(t):
     '''expression : expression PLUS expression
