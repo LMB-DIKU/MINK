@@ -47,12 +47,20 @@ t_DIVIDE  = r'/'
 t_LPAR  = r'\('
 t_RPAR  = r'\)'
 t_STRING = r'"[a-zA-Z0-9()!.,: ]*"'
+t_NUMBER = r'(0|[1-9][0-9]*)(.[0-9]+)?'
 
 # keywords
 t_IF = r'if'
 t_ELSE = r'else'
 t_PRINT = r'print'
 
+# variabelnavne
+t_ID = r'[a-zA-Z][a-zA-Z0-9]*'
+
+# linjenummer
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count("\n")
 
 def t_error(t):
     print("Lexeren forstår ikke følgende tegn: {t}")
